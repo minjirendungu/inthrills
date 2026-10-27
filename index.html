@@ -24,9 +24,11 @@ body{background:#111;color:#f6f4ee;font-family:'Bricolage Grotesque',system-ui,s
 .logo .ring{left:16px;top:44px;width:326px;height:108px;border:4px solid #f6f4ee;transform:rotate(-6deg)}
 .logo .pill{left:14px;top:31px;width:332px;height:108px;background:#f6f4ee;transform:rotate(-8deg);display:flex;align-items:center;justify-content:center;color:#111;font-style:normal;font-weight:800;font-size:50px;letter-spacing:-1.5px}
 .page{position:relative;max-width:1440px;min-height:100vh;min-height:100svh;margin:0 auto;padding:40px 64px 48px;display:flex;flex-direction:column}
-nav.top{display:flex;align-items:center;justify-content:flex-end;gap:12px;min-height:56px}
+nav.top{display:flex;align-items:center;justify-content:flex-end;min-height:56px}
 .badge{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px;border:1px solid rgba(246,244,238,.35);border-radius:999px;background:rgba(17,17,17,.5);font-size:15px;font-weight:600;animation-delay:3.2s}
 .badge span{width:8px;height:8px;border-radius:50%;background:#2de2c8}
+.top{gap:12px}
+.badge-m{display:none}
 .snd{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid rgba(246,244,238,.35);border-radius:50%;background:rgba(17,17,17,.5);color:#f6f4ee;cursor:pointer;animation-delay:3.2s}
 .snd:hover{background:rgba(246,244,238,.2)}
 .snd .on{display:none}.snd[aria-pressed="true"] .on{display:block}.snd[aria-pressed="true"] .off{display:none}
@@ -38,7 +40,7 @@ h1 .dot{color:#2de2c8}
 .sub{margin:-12px 0 0;max-width:520px;font-size:22px;line-height:1.45;color:#d6d3cb;font-weight:500;animation-delay:6.1s}
 .join{min-height:64px;padding:0 64px;border:0;border-radius:999px;background:#ecebe4;color:#111;font-family:inherit;font-size:20px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;animation-delay:6.4s}
 .join:hover,.claim:hover{background:#fff}
-.fade{opacity:0;animation:fade .8s ease-out forwards}
+.fade{opacity:0;animation-name:fade;animation-duration:.8s;animation-timing-function:ease-out;animation-fill-mode:forwards}
 footer{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 32px;font-size:14px;font-weight:500;color:rgba(255,255,255,.78);animation-delay:6.8s}
 footer nav{display:flex;flex-wrap:wrap;gap:0 8px}
 footer nav a{min-height:44px;display:inline-flex;align-items:center;padding:0 8px;color:rgba(255,255,255,.78);text-decoration:none}
@@ -48,6 +50,7 @@ footer nav a:hover{color:#2de2c8}
 .soc a:hover{background:rgba(255,255,255,.22)}
 input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid #2de2c8;outline-offset:2px}
 
+/* modal */
 .modal{position:absolute;inset:0;z-index:30;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(8,8,8,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:mfade .35s ease-out both}
 .modal.open{display:flex}
 .card{position:relative;width:100%;max-width:480px;max-height:100%;overflow:auto;padding:40px 32px 32px;border-radius:36px;border:1px solid rgba(255,255,255,.4);background:linear-gradient(135deg,rgba(255,255,255,.28),rgba(255,255,255,.08) 45%,rgba(255,255,255,.16));backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);box-shadow:inset 0 1px 1px rgba(255,255,255,.65),inset 0 -1px 1px rgba(255,255,255,.18),0 30px 80px rgba(0,0,0,.5);text-align:center;animation:pop .65s cubic-bezier(.34,1.56,.64,1) both}
@@ -99,10 +102,21 @@ h2 b{color:#2de2c8}
 100%{opacity:1;left:var(--lx,64px);top:var(--ly,40px);transform:scale(.344) rotate(0) translate(0,0)}}
 
 @media (max-width:720px){
-.page{padding:24px 20px 28px}
+.page{padding:24px 20px 24px}
 .logo{--lx:20px;--ly:30px}.logo-tilt{transform-origin:20px 40px}
-.sub{font-size:19px}.join{padding:0 48px}
-footer{flex-direction:column;align-items:flex-start}
+.shade{background:linear-gradient(180deg,rgba(14,14,14,.76),rgba(14,14,14,.82) 55%,rgba(14,14,14,.96))}
+nav.top .badge{display:none}
+.badge-m{display:inline-flex;min-height:36px;padding:0 14px;font-size:14px}
+main{gap:28px}
+h1{font-size:42px}
+.sub{font-size:18px;max-width:300px;margin-top:-8px}
+.join{min-height:56px;padding:0 44px;font-size:18px}
+footer{flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;font-size:12.5px}
+footer>div:first-child{order:3;margin-top:4px}
+footer nav{order:2;justify-content:center}
+footer nav a{min-height:32px;padding:0 6px}
+.soc{order:1;gap:12px}
+.soc a{width:40px;height:40px}
 .card{padding:36px 22px 24px}
 }
 @media (prefers-reduced-motion:reduce){
@@ -125,14 +139,10 @@ footer{flex-direction:column;align-items:flex-start}
   </div></div></div>
 
   <div class="page">
-    <nav class="top">
-      <button class="snd fade" id="snd" type="button" aria-pressed="false" aria-label="Turn sound on">
-        <svg class="off" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h4l5 4v-13l-5 4z"/><path d="M17 9.5l4 5M21 9.5l-4 5"/></svg>
-        <svg class="on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h4l5 4v-13l-5 4z"/><path d="M16.5 9a4 4 0 0 1 0 6M19 6.5a7.5 7.5 0 0 1 0 11"/></svg>
-      </button>
-      <div class="badge fade"><span aria-hidden="true"></span>Coming soon</div>
-    </nav>
+    <nav class="top"><button class="snd fade" id="snd" type="button" aria-pressed="false" aria-label="Turn sound on"><svg class="off" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h4l5 4v-13l-5 4z"/><path d="M17 9.5l4 5M21 9.5l-4 5"/></svg><svg class="on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h4l5 4v-13l-5 4z"/><path d="M16.5 9a4 4 0 0 1 0 6M19 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
+      <div class="badge fade"><span aria-hidden="true"></span>Coming soon</div></nav>
     <main>
+      <div class="badge badge-m fade"><span aria-hidden="true"></span>Coming soon</div>
       <h1 id="headline" aria-label="Friendships start with a moment."></h1>
       <p class="sub fade">Discover what’s happening nearby. Meet the people there.</p>
       <button class="join fade" id="openJoin" type="button">Join</button>
@@ -261,7 +271,6 @@ $('share').addEventListener('click', () => {
   catch(_){ fallback(); }
 });
 
-// Sound on/off button
 const vid = document.querySelector('.stage>video'), snd = $('snd');
 snd.addEventListener('click', () => {
   vid.muted = !vid.muted;
