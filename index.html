@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>InThrills – Coming soon</title>
+<meta name="description" content="Friendships start with a moment. Discover what’s happening nearby. Meet the people there.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:#111;color:#f6f4ee;font-family:'Bricolage Grotesque',system-ui,sans-serif}
+.stage{position:relative;min-height:100vh;min-height:100svh;overflow:hidden;background:#111}
+.stage>video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.85)}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,14,14,.66),rgba(14,14,14,.72) 55%,rgba(14,14,14,.94))}
+.spot{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(520px circle at calc(var(--px,50)*1%) calc(var(--py,50)*1%),rgba(255,255,255,.13),rgba(255,255,255,0) 60%)}
+.logo-layer{position:absolute;inset:0;z-index:5;display:flex;justify-content:center;pointer-events:none}
+.logo-wrap{position:relative;width:100%;max-width:1440px;height:100%}
+.logo-tilt{position:absolute;inset:0;transform-origin:64px 60px;transform:translate(calc(var(--mx,0)*7px),calc(var(--my,0)*5px)) rotate(calc(var(--mx,0)*4deg));transition:transform .3s ease-out}
+.logo{position:absolute;left:64px;top:40px;width:360px;height:170px;transform-origin:0 0;transform:scale(.344);animation:logo 3.4s linear .2s both,glow 3.4s linear .2s both}
+.logo i{position:absolute;display:block;border-radius:999px}
+.logo .ring{left:16px;top:44px;width:326px;height:108px;border:4px solid #f6f4ee;transform:rotate(-6deg)}
+.logo .pill{left:14px;top:31px;width:332px;height:108px;background:#f6f4ee;transform:rotate(-8deg);display:flex;align-items:center;justify-content:center;color:#111;font-style:normal;font-weight:800;font-size:50px;letter-spacing:-1.5px}
+.page{position:relative;max-width:1440px;min-height:100vh;min-height:100svh;margin:0 auto;padding:40px 64px 48px;display:flex;flex-direction:column}
+nav.top{display:flex;align-items:center;justify-content:flex-end;gap:12px;min-height:56px}
+.badge{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px;border:1px solid rgba(246,244,238,.35);border-radius:999px;background:rgba(17,17,17,.5);font-size:15px;font-weight:600;animation-delay:3.2s}
+.badge span{width:8px;height:8px;border-radius:50%;background:#2de2c8}
+.snd{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid rgba(246,244,238,.35);border-radius:50%;background:rgba(17,17,17,.5);color:#f6f4ee;cursor:pointer;animation-delay:3.2s}
+.snd:hover{background:rgba(246,244,238,.2)}
+.snd .on{display:none}.snd[aria-pressed="true"] .on{display:block}.snd[aria-pressed="true"] .off{display:none}
+main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:40px;padding:24px 0}
+h1{margin:0;max-width:960px;font-weight:800;font-size:clamp(44px,7.4vw,104px);line-height:.96;letter-spacing:-.045em}
+h1 .w{display:inline-block;white-space:nowrap}
+h1 .c{opacity:0;animation:show .01s linear forwards}
+h1 .dot{color:#2de2c8}
+.sub{margin:-12px 0 0;max-width:520px;font-size:22px;line-height:1.45;color:#d6d3cb;font-weight:500;animation-delay:6.1s}
+.join{min-height:64px;padding:0 64px;border:0;border-radius:999px;background:#ecebe4;color:#111;font-family:inherit;font-size:20px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;animation-delay:6.4s}
+.join:hover,.claim:hover{background:#fff}
+.fade{opacity:0;animation:fade .8s ease-out forwards}
+footer{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 32px;font-size:14px;font-weight:500;color:rgba(255,255,255,.78);animation-delay:6.8s}
+footer nav{display:flex;flex-wrap:wrap;gap:0 8px}
+footer nav a{min-height:44px;display:inline-flex;align-items:center;padding:0 8px;color:rgba(255,255,255,.78);text-decoration:none}
+footer nav a:hover{color:#2de2c8}
+.soc{display:flex;gap:10px}
+.soc a{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.1);color:#fff}
+.soc a:hover{background:rgba(255,255,255,.22)}
+input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid #2de2c8;outline-offset:2px}
+
+.modal{position:absolute;inset:0;z-index:30;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(8,8,8,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:mfade .35s ease-out both}
+.modal.open{display:flex}
+.card{position:relative;width:100%;max-width:480px;max-height:100%;overflow:auto;padding:40px 32px 32px;border-radius:36px;border:1px solid rgba(255,255,255,.4);background:linear-gradient(135deg,rgba(255,255,255,.28),rgba(255,255,255,.08) 45%,rgba(255,255,255,.16));backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);box-shadow:inset 0 1px 1px rgba(255,255,255,.65),inset 0 -1px 1px rgba(255,255,255,.18),0 30px 80px rgba(0,0,0,.5);text-align:center;animation:pop .65s cubic-bezier(.34,1.56,.64,1) both}
+.card::before{content:"";position:absolute;inset:0;border-radius:36px;pointer-events:none;background:radial-gradient(120% 55% at 18% 0%,rgba(255,255,255,.38),rgba(255,255,255,0) 55%)}
+.x{position:absolute;top:16px;right:16px;z-index:2;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.14);color:#fff;cursor:pointer}
+.col{position:relative;display:flex;flex-direction:column;align-items:center;gap:20px;width:100%}
+.mini{position:relative;width:124px;height:56px;flex:none}
+.mini .ring{position:absolute;left:4px;top:14px;width:116px;height:42px;border:2px solid #f6f4ee;border-radius:999px;transform:rotate(-6deg)}
+.mini .pill{position:absolute;left:0;top:4px;width:120px;height:42px;background:#f6f4ee;border-radius:999px;transform:rotate(-8deg);display:flex;align-items:center;justify-content:center;color:#111;font-weight:800;font-size:20px;letter-spacing:-.5px}
+h2{margin:0;font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.05;text-transform:uppercase}
+h2 b{color:#2de2c8}
+.card p{margin:0;font-size:16px;line-height:1.5;font-weight:500;color:rgba(255,255,255,.9)}
+.fields{width:100%;display:flex;flex-direction:column;gap:12px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.itfield{width:100%;min-height:56px;padding:0 24px;border:1px solid rgba(255,255,255,.42);border-radius:999px;background:rgba(255,255,255,.16);color:#fff;font-family:inherit;font-size:17px;font-weight:500}
+.itfield::placeholder{color:rgba(255,255,255,.8)}
+.check{display:inline-flex;align-items:center;gap:10px;min-height:44px;font-size:16px;font-weight:500;cursor:pointer}
+.check input{width:20px;height:20px;accent-color:#2de2c8}
+.err{font-size:15px;font-weight:600;color:#ffd9b0}
+.claim{width:100%;min-height:60px;border:0;border-radius:999px;background:#f6f4ee;color:#111;font-family:inherit;font-size:18px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.claim[disabled]{opacity:.6;cursor:wait}
+.done h2{font-size:40px;line-height:1}
+.band{position:relative;width:100%;max-width:400px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 30px;border-radius:16px;color:#111;text-align:left;background:radial-gradient(circle at 0 50%,rgba(0,0,0,0) 15px,#f6f4ee 16px) left/51% 100% no-repeat,radial-gradient(circle at 100% 50%,rgba(0,0,0,0) 15px,#f6f4ee 16px) right/51% 100% no-repeat;box-shadow:0 18px 40px rgba(0,0,0,.35);animation:band .9s cubic-bezier(.34,1.56,.64,1) .1s both}
+.band small{display:block;font-size:11px;font-weight:800;letter-spacing:.24em;text-transform:uppercase}
+.band strong{display:block;margin-top:6px;font-size:34px;font-weight:800;letter-spacing:-.03em;line-height:1;text-transform:uppercase;overflow-wrap:anywhere}
+.band .bars{flex:none;width:76px;height:48px;padding-left:16px;border-left:2px dashed rgba(17,17,17,.35);box-sizing:content-box;background:repeating-linear-gradient(90deg,#111 0 3px,transparent 3px 6px,#111 6px 7px,transparent 7px 11px) content-box}
+.friend{min-height:52px;padding:0 32px;border-radius:999px;border:1px solid rgba(255,255,255,.5);background:rgba(255,255,255,.16);color:#fff;font-family:inherit;font-size:16px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.msg{font-size:15px;font-weight:500;color:rgba(255,255,255,.9);overflow-wrap:anywhere}
+[hidden]{display:none!important}
+
+@keyframes show{to{opacity:1}}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes mfade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:translateY(32px) scale(.88)}to{opacity:1;transform:none}}
+@keyframes band{from{opacity:0;transform:translateY(-40px) rotate(-14deg) scale(.8)}to{opacity:1;transform:rotate(-3deg)}}
+@keyframes glow{0%,72%{filter:drop-shadow(0 0 28px rgba(246,244,238,.55))}86%,100%{filter:drop-shadow(0 0 0 rgba(246,244,238,0))}}
+@keyframes logo{
+0%{opacity:0;left:15%;top:125%;transform:scale(.45,.7) rotate(-40deg) translate(-50%,-50%);animation-timing-function:cubic-bezier(.2,.9,.3,1)}
+12%{opacity:1;left:50%;top:44%;transform:scale(1.15,.85) rotate(8deg) translate(-50%,-50%);animation-timing-function:cubic-bezier(.45,0,.55,1)}
+18%{opacity:1;left:50%;top:53%;transform:scale(.94,1.08) rotate(-5deg) translate(-50%,-50%);animation-timing-function:cubic-bezier(.45,0,.55,1)}
+24%{opacity:1;left:50%;top:50%;transform:scale(1) rotate(0) translate(-50%,-50%);animation-timing-function:cubic-bezier(.45,0,.55,1)}
+32%{opacity:1;left:50%;top:50%;transform:scale(1) rotate(-4deg) translate(-50%,-50%);animation-timing-function:cubic-bezier(.45,0,.55,1)}
+38%{opacity:1;left:50%;top:50%;transform:scale(1) rotate(4deg) translate(-50%,-50%);animation-timing-function:cubic-bezier(.45,0,.55,1)}
+44%,50%{opacity:1;left:50%;top:50%;transform:scale(1) rotate(0) translate(-50%,-50%);animation-timing-function:cubic-bezier(.45,0,.55,1)}
+54%{opacity:1;left:50%;top:53%;transform:scale(1.12,.86) rotate(0) translate(-50%,-50%);animation-timing-function:cubic-bezier(.3,0,.2,1)}
+60%{opacity:1;left:50%;top:46%;transform:scale(.9,1.14) rotate(-6deg) translate(-50%,-50%);animation-timing-function:cubic-bezier(.45,0,.55,1)}
+72%{opacity:1;left:72%;top:9%;transform:scale(.58,.5) rotate(18deg) translate(-25%,-25%);animation-timing-function:cubic-bezier(.45,0,.55,1)}
+86%{opacity:1;left:calc(var(--lx,64px) - 24px);top:calc(var(--ly,40px) + 12px);transform:scale(.37,.31) rotate(-7deg) translate(0,0);animation-timing-function:cubic-bezier(.45,0,.55,1)}
+100%{opacity:1;left:var(--lx,64px);top:var(--ly,40px);transform:scale(.344) rotate(0) translate(0,0)}}
+
+@media (max-width:720px){
+.page{padding:24px 20px 28px}
+.logo{--lx:20px;--ly:30px}.logo-tilt{transform-origin:20px 40px}
+.sub{font-size:19px}.join{padding:0 48px}
+footer{flex-direction:column;align-items:flex-start}
+.card{padding:36px 22px 24px}
+}
+@media (prefers-reduced-motion:reduce){
+.logo{animation:none;opacity:1}
+.fade,h1 .c{animation:none!important;opacity:1!important}
+.card,.modal,.band{animation:none!important}
+.band{transform:rotate(-3deg)}
+.logo-tilt{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <video src="./hero.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+  <div class="shade"></div>
+  <div class="spot" aria-hidden="true"></div>
+
+  <div class="logo-layer"><div class="logo-wrap"><div class="logo-tilt">
+    <div class="logo" role="img" aria-label="InThrills"><i class="ring"></i><i class="pill">InThrills</i></div>
+  </div></div></div>
+
+  <div class="page">
+    <nav class="top">
+      <button class="snd fade" id="snd" type="button" aria-pressed="false" aria-label="Turn sound on">
+        <svg class="off" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h4l5 4v-13l-5 4z"/><path d="M17 9.5l4 5M21 9.5l-4 5"/></svg>
+        <svg class="on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h4l5 4v-13l-5 4z"/><path d="M16.5 9a4 4 0 0 1 0 6M19 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+      </button>
+      <div class="badge fade"><span aria-hidden="true"></span>Coming soon</div>
+    </nav>
+    <main>
+      <h1 id="headline" aria-label="Friendships start with a moment."></h1>
+      <p class="sub fade">Discover what’s happening nearby. Meet the people there.</p>
+      <button class="join fade" id="openJoin" type="button">Join</button>
+    </main>
+    <footer class="fade">
+      <div>© 2026 InThrills. All rights reserved.</div>
+      <nav aria-label="Legal">
+        <a href="#">Privacy Policy</a><a href="#">Cookie Policy</a><a href="#">Terms &amp; Conditions</a><a href="#">Cookie Settings</a>
+      </nav>
+      <div class="soc">
+        <a href="#" aria-label="InThrills on LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v6M8 7.6v.01M12 17v-6M12 13.2c0-1.4 1-2.2 2.2-2.2 1.5 0 2.3 1 2.3 2.6V17"/></svg></a>
+        <a href="#" aria-label="InThrills on Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".6" fill="currentColor"/></svg></a>
+        <a href="#" aria-label="InThrills on TikTok"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.4 2.4 2 4 4.5 4.2"/></svg></a>
+        <a href="#" aria-label="InThrills on X"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h4.6l11.4 16h-4.6z"/><path d="M20 4l-6.8 7.6M4 20l6.8-7.6"/></svg></a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="card" role="dialog" aria-modal="true" aria-label="Join InThrills">
+      <button class="x" id="closeJoin" type="button" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+
+      <form class="col" id="form" novalidate>
+        <div class="mini" role="img" aria-label="InThrills"><div class="ring"></div><div class="pill">InThrills</div></div>
+        <h2>You’re on the guest list<b>.</b></h2>
+        <p>InThrills is opening to a small crowd first. We’re letting people in a few at a time as we test and shape the app together.<br><br>Drop your details to claim your spot. We’ll email you the moment the doors open.</p>
+        <div class="fields">
+          <div><label class="sr" for="jn-name">First name</label><input class="itfield" id="jn-name" name="name" type="text" placeholder="First name" autocomplete="given-name"></div>
+          <div><label class="sr" for="jn-email">Email</label><input class="itfield" id="jn-email" name="email" type="email" placeholder="Email" autocomplete="email"></div>
+          <div><label class="sr" for="jn-country">Country</label><input class="itfield" id="jn-country" name="country" type="text" placeholder="Country" autocomplete="country-name"></div>
+        </div>
+        <label class="check"><input type="checkbox" name="beta" id="jn-beta">I also want to test new features</label>
+        <div class="err" id="err" role="alert" hidden>Add your first name and a valid email.</div>
+        <button class="claim" id="claim" type="submit">Claim my spot</button>
+      </form>
+
+      <div class="col done" id="done" hidden>
+        <h2>You’re in<b>.</b></h2>
+        <div class="band" id="band" role="img"><div><small>InThrills · All access</small><strong id="who"></strong></div><div class="bars" aria-hidden="true"></div></div>
+        <p>We’ll email you the moment the doors open.</p>
+        <button class="friend" id="share" type="button">Bring a friend</button>
+        <div class="msg" id="shareMsg" role="status" hidden></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// To collect real signups, create a free form at https://formspree.io
+// and paste its endpoint here. Leave empty for demo mode.
+const FORM_ENDPOINT = "";
+
+(function(){
+  const h = document.getElementById('headline');
+  const words = ['Friendships','start','with','a','moment.'];
+  const starts = [3.60,4.44,4.86,5.21,5.35];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  words.forEach((word,wi)=>{
+    const w = document.createElement('span'); w.className='w'; w.setAttribute('aria-hidden','true');
+    [...word].forEach((ch,ci)=>{
+      const s = document.createElement('span'); s.className='c'; s.textContent=ch;
+      s.style.animationDelay=(starts[wi]+ci*0.07).toFixed(2)+'s';
+      if(wi===words.length-1 && ci===word.length-1) s.classList.add('dot');
+      if(reduce) s.style.opacity=1;
+      w.appendChild(s);
+    });
+    h.appendChild(w);
+    if(wi<words.length-1) h.appendChild(document.createTextNode(' '));
+  });
+})();
+
+const stage = document.getElementById('stage');
+stage.addEventListener('mousemove', e=>{
+  const r = stage.getBoundingClientRect();
+  const x = (e.clientX-r.left)/r.width, y = (e.clientY-r.top)/r.height;
+  stage.style.setProperty('--mx',((x-.5)*2).toFixed(3));
+  stage.style.setProperty('--my',((y-.5)*2).toFixed(3));
+  stage.style.setProperty('--px',(x*100).toFixed(1));
+  stage.style.setProperty('--py',(y*100).toFixed(1));
+});
+
+const $ = id => document.getElementById(id);
+const modal = $('modal');
+const openModal = () => { modal.classList.add('open'); setTimeout(()=>$('jn-name').focus(),50); };
+const closeModal = () => { modal.classList.remove('open'); $('openJoin').focus(); };
+$('openJoin').addEventListener('click', openModal);
+$('closeJoin').addEventListener('click', closeModal);
+modal.addEventListener('click', e => { if(e.target===modal) closeModal(); });
+document.addEventListener('keydown', e => { if(e.key==='Escape' && modal.classList.contains('open')) closeModal(); });
+
+$('form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const name = $('jn-name').value.trim();
+  const email = $('jn-email').value.trim();
+  if(!name || !/^\S+@\S+\.\S+$/.test(email)){ $('err').hidden=false; return; }
+  $('err').hidden=true;
+
+  if(FORM_ENDPOINT){
+    const btn = $('claim'); btn.disabled=true;
+    try{
+      const res = await fetch(FORM_ENDPOINT,{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body:JSON.stringify({name,email,country:$('jn-country').value.trim(),beta:$('jn-beta').checked})
+      });
+      if(!res.ok) throw new Error();
+    }catch(_){
+      btn.disabled=false;
+      $('err').textContent='Something went wrong. Check your connection and try again.';
+      $('err').hidden=false; return;
+    }
+    btn.disabled=false;
+  }
+
+  const first = name.split(/\s+/)[0];
+  $('who').textContent = first;
+  $('band').setAttribute('aria-label','InThrills wristband for '+first);
+  $('form').hidden=true; $('done').hidden=false;
+});
+
+$('share').addEventListener('click', () => {
+  const url = location.href.split('#')[0];
+  const show = t => { const m=$('shareMsg'); m.textContent=t; m.hidden=false; };
+  const fallback = () => show('Copy this link and send it to a friend: '+url);
+  try{ navigator.clipboard.writeText(url).then(()=>show('Link copied. Send it to a friend.'),fallback); }
+  catch(_){ fallback(); }
+});
+
+// Sound on/off button
+const vid = document.querySelector('.stage>video'), snd = $('snd');
+snd.addEventListener('click', () => {
+  vid.muted = !vid.muted;
+  if(!vid.muted) vid.play().catch(()=>{});
+  snd.setAttribute('aria-pressed', String(!vid.muted));
+  snd.setAttribute('aria-label', vid.muted ? 'Turn sound on' : 'Turn sound off');
+});
+</script>
+</body>
+</html>
